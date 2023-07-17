@@ -129,7 +129,8 @@ class _LoginPageState extends State<LoginPage> {
             Flexible(
               child: GestureDetector(
                 onTap: () {
-                  AuthController.instance.login(emailController.text.trim(), passwordController.text.trim());
+                  AuthController.instance.login(emailController.text.trim(),
+                      passwordController.text.trim());
                 },
                 child: Container(
                   width: w * 0.5,

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase_app/login_page.dart';
+import 'package:flutter_firebase_app/verify_email.dart';
 import 'package:flutter_firebase_app/welcome_page.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,9 @@ class AuthController extends GetxController {
     try {
       await auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      if (!auth.currentUser!.emailVerified) {
+        Get.offAll(() => const VerifyEmail());
+      }
     } catch (e) {
       Get.snackbar("About user", "User message",
           backgroundColor: Colors.redAccent,
@@ -46,8 +50,7 @@ class AuthController extends GetxController {
 
   void login(String email, String password) async {
     try {
-      await auth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
       Get.snackbar("About Login", "Login message",
           backgroundColor: Colors.redAccent,

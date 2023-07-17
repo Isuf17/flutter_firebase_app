@@ -13,6 +13,7 @@ class VerifyEmail extends StatefulWidget {
 
 class _VerifyEmailState extends State<VerifyEmail> {
   bool isEmailVerified = false;
+  Timer? timer;
 
   @override
   void initState() {
@@ -21,20 +22,30 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
     if (!isEmailVerified) {
       sendVerificationEmail();
+
+      Timer.periodic(Duration(seconds: 3), (_) => checkEmailVerified());
     }
+  }
+
+  Future checkEmailVerified() async {
+    await FirebaseAuth.instance.currentUser!.reload();
+    setState(() {
+      isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+    });
+
+    if (isEmailVerified) timer?.cancel();
   }
 
   Future sendVerificationEmail() async {
     try {
       final user = FirebaseAuth.instance.currentUser!;
       await user.sendEmailVerification();
-    }
-    catch(e) {
+    } catch (e) {
       Get.snackbar("About user", "User message",
           backgroundColor: Colors.redAccent,
           snackPosition: SnackPosition.BOTTOM,
           titleText: const Text(
-            "Account creation failed",
+            "Account broken",
             style: TextStyle(color: Colors.white),
           ),
           messageText: Text(
@@ -48,8 +59,8 @@ class _VerifyEmailState extends State<VerifyEmail> {
   Widget build(BuildContext context) => isEmailVerified
       ? WelcomePage(email: FirebaseAuth.instance.currentUser!.email)
       : Scaffold(
-    appBar: AppBar(
-      title: const Text('Verify Email Please'),
-    ),
-  );
+          appBar: AppBar(
+            title: const Text('Verify Email Please'),
+          ),
+        );
 }

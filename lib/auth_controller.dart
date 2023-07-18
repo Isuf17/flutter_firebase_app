@@ -15,15 +15,6 @@ class AuthController extends GetxController {
     super.onReady();
     _user = Rx<User?>(auth.currentUser);
     _user.bindStream(auth.userChanges());
-    ever(_user, _initialScreen);
-  }
-
-  _initialScreen(User? user) {
-    if (user == null) {
-      Get.offAll(() => const LoginPage());
-    } else {
-      Get.offAll(() => WelcomePage(email: user.email));
-    }
   }
 
   void register(String email, String password) async {
@@ -32,6 +23,9 @@ class AuthController extends GetxController {
           email: email, password: password);
       if (!auth.currentUser!.emailVerified) {
         Get.offAll(() => const VerifyEmail());
+      }
+      else {
+        Get.offAll(() => WelcomePage(email: email));
       }
     } catch (e) {
       Get.snackbar("About user", "User message",
@@ -51,7 +45,13 @@ class AuthController extends GetxController {
   void login(String email, String password) async {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
-    } catch (e) {
+      if (!auth.currentUser!.emailVerified) {
+        Get.offAll(() => const VerifyEmail());
+      }
+      else {
+        Get.offAll(() => WelcomePage(email: email));
+      }    }
+    catch (e) {
       Get.snackbar("About Login", "Login message",
           backgroundColor: Colors.redAccent,
           snackPosition: SnackPosition.BOTTOM,
@@ -68,5 +68,6 @@ class AuthController extends GetxController {
 
   void logOut() async {
     await auth.signOut();
+    Get.offAll(() => const LoginPage());
   }
 }

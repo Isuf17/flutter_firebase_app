@@ -23,8 +23,7 @@ class AuthController extends GetxController {
           email: email, password: password);
       if (!auth.currentUser!.emailVerified) {
         Get.offAll(() => const VerifyEmail());
-      }
-      else {
+      } else {
         Get.offAll(() => WelcomePage(email: email));
       }
     } catch (e) {
@@ -47,11 +46,10 @@ class AuthController extends GetxController {
       await auth.signInWithEmailAndPassword(email: email, password: password);
       if (!auth.currentUser!.emailVerified) {
         Get.offAll(() => const VerifyEmail());
-      }
-      else {
+      } else {
         Get.offAll(() => WelcomePage(email: email));
-      }    }
-    catch (e) {
+      }
+    } catch (e) {
       Get.snackbar("About Login", "Login message",
           backgroundColor: Colors.redAccent,
           snackPosition: SnackPosition.BOTTOM,

@@ -1,12 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_app/auth_controller.dart';
+import 'package:flutter_firebase_app/google_sign_in.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
-
-  static List images = ["g.png", "t.png", "f.png"];
 
   @override
   Widget build(BuildContext context) {
@@ -135,32 +136,30 @@ class SignUpPage extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: h*0.09),
+            ElevatedButton.icon(
+              onPressed: () {
+                final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+                provider.googleLogin();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                minimumSize: Size(double.infinity, h * 0.05),
+              ),
+              icon: const FaIcon(FontAwesomeIcons.google, color: Colors.black),
+              label: const Text('Sign up with Google'),
+            ),
+            SizedBox(height: 0.09*h),
             RichText(
                 text: TextSpan(
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => Get.back(),
-                    text: "Have an account?",
-                    style: TextStyle(fontSize: 20, color: Colors.grey[500]))),
-            RichText(
-                text: TextSpan(
-              text: "Sign up using one of the following methods",
-              style: TextStyle(color: Colors.grey[500], fontSize: 16),
-            )),
-            Wrap(
-              children: List<Widget>.generate(3, (index) {
-                return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.grey[500],
-                    child: CircleAvatar(
-                      radius: 25,
-                      backgroundImage: AssetImage("assets/${images[index]}"),
-                    ),
-                  ),
-                );
-              }),
-            )
+                    text: "Have an account? Click Here",
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey[500],
+                        fontWeight: FontWeight.bold))),
           ],
         ),
       ),

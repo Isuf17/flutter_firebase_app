@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_app/auth_controller.dart';
+import 'notification_api.dart';
 
 class WelcomePage extends StatelessWidget {
-  String? email;
-  WelcomePage({super.key, required this.email});
+  final String? email;
+  const WelcomePage({super.key, required this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +48,36 @@ class WelcomePage extends StatelessWidget {
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey[500])),
+              ],
+            ),
+          ),
+          Container(
+            height: h*0.4,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                ElevatedButton(
+                    onPressed: () {},
+                    child: Text(
+                      'Simple Notification'
+                    )
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      NotificationApi.showNotification(
+                        id: 0,
+                        title: 'Affirmation',
+                        body: 'Have a great day!',
+                      );
+                    },
+                    child: Text(
+                      'Scheduled Notification'
+                    )
+                ),
+                ElevatedButton(
+                    onPressed: () {},
+                    child: Text('Remove Notifications')
+                ),
               ],
             ),
           ),

@@ -2,6 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_app/auth_controller.dart';
 import 'package:flutter_firebase_app/signup_page.dart';
+import 'package:flutter_firebase_app/google_sign_in.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,10 +15,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    var emailController = TextEditingController();
-    var passwordController = TextEditingController();
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -152,6 +156,20 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
+            ),
+            SizedBox(height: h*0.05),
+            ElevatedButton.icon(
+              onPressed: () {
+                final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+                provider.googleLogin();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                minimumSize: Size(double.infinity, h * 0.05),
+              ),
+              icon: const FaIcon(FontAwesomeIcons.google, color: Colors.black),
+              label: const Text('Sign in with Google'),
             ),
             const Expanded(child: SizedBox()),
             RichText(
